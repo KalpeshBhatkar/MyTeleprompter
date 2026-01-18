@@ -5,7 +5,14 @@
              x:Class="MyTeleprompter.Views.NoteEntryPage"
              Title="Edit Note">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Delete" Command="{Binding DeleteCommand}" />
+        <ToolbarItem Command="{Binding DeleteCommand}" Order="Primary">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource Glyph="&#xf1f8;" 
+                             FontFamily="FontAwesome" 
+                             Color="Red" 
+                             Size="24" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
     <Grid RowDefinitions="Auto,*,Auto" Padding="15" RowSpacing="15">

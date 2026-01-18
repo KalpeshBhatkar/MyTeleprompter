@@ -17,6 +17,7 @@ namespace MyTeleprompter
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("FaSolid900.otf", "FontAwesome");
                 });
 
             #if DEBUG

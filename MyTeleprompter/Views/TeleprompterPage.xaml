@@ -35,6 +35,24 @@
             </Label>
         </ScrollView>
 
+        <Border BackgroundColor="#CC000000"
+            Stroke="Red"
+            StrokeThickness="2"
+            StrokeShape="RoundRectangle 20"
+            HorizontalOptions="Center"
+            VerticalOptions="Start"
+            Margin="0,40,0,0"
+            Padding="15,5"
+            IsVisible="{Binding IsRecording}">
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="{Binding RecordingDuration}"
+                   TextColor="White"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+        </Border>
+
         <!-- CONTROLS PANEL -->
         <VerticalStackLayout VerticalOptions="End"
                              Margin="16"

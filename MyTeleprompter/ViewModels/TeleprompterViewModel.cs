@@ -1,7 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Camera.MAUI; // Updated Namespace
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MyTeleprompter.Models;
-using Camera.MAUI; // Updated Namespace
+using System.Diagnostics;
 
 namespace MyTeleprompter.ViewModels
 {
@@ -33,6 +34,12 @@ namespace MyTeleprompter.ViewModels
         [ObservableProperty]
         double fontSize = 32;
 
+        [ObservableProperty]
+        string recordingDuration = "00:00"; // The text we bind to
+
+        private Stopwatch _stopwatch = new Stopwatch();
+        private bool _timerRunning;
+
         [RelayCommand]
         async Task ToggleRecording(object viewElement)
         {
@@ -42,8 +49,10 @@ namespace MyTeleprompter.ViewModels
             if (IsRecording)
             {
                 // STOP RECORDING
-                await camera.StopRecordingAsync();
                 IsRecording = false;
+                _timerRunning = false; // Stop the timer loop
+                _stopwatch.Stop();
+                await camera.StopRecordingAsync();
 
                 // CHECK IF FILE EXISTS
                 // Camera.MAUI usually returns the file path it wrote to, 
@@ -75,6 +84,11 @@ namespace MyTeleprompter.ViewModels
                 if (result == CameraResult.Success)
                 {
                     IsRecording = true;
+
+                    // --- START TIMER LOGIC ---
+                    _stopwatch.Restart();
+                    _timerRunning = true;
+                    _ = RunTimerLoop(); // Fire and forget the timer task
                 }
                 else
                 {
@@ -115,6 +129,21 @@ namespace MyTeleprompter.ViewModels
 
             // Allow screen to sleep again when done
             DeviceDisplay.Current.KeepScreenOn = false;
+        }
+
+        // Separate Task to handle the ticking clock
+        private async Task RunTimerLoop()
+        {
+            while (_timerRunning && IsRecording)
+            {
+                // Format time as MM:ss (Minutes:Seconds)
+                RecordingDuration = _stopwatch.Elapsed.ToString(@"mm\:ss");
+
+                // Wait 1 second
+                await Task.Delay(1000);
+            }
+            // Reset when done (optional)
+            RecordingDuration = "00:00";
         }
 
         private async Task<bool> SaveToGallery(string sourceFile)
