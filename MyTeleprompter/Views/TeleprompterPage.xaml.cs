@@ -23,7 +23,17 @@ public partial class TeleprompterPage : ContentPage
         if (cameraView.NumCamerasDetected > 0)
         {
             if (cameraView.NumMicrophonesDetected > 0)
-                cameraView.Microphone = cameraView.Microphones.First();
+            {
+                // Try to find a microphone optimized for Video Recording (Camcorder)
+                // If not found, fall back to the first available one.
+                var bestMic = cameraView.Microphones.FirstOrDefault(m => m.Name.ToLower().Contains("camcorder"))
+                              ?? cameraView.Microphones.FirstOrDefault(m => m.Name.ToLower().Contains("main"))
+                              ?? cameraView.Microphones.First();
+
+                cameraView.Microphone = bestMic;
+            }
+
+            
 
             cameraView.Camera = cameraView.Cameras.FirstOrDefault(c => c.Position == Camera.MAUI.CameraPosition.Front)
                                 ?? cameraView.Cameras.First();
