@@ -28,5 +28,17 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.myteleprompter.ios</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to the camera to record your teleprompter sessions.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to the microphone to record audio for your video.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to save recorded videos to your gallery.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to save videos to your gallery.</string>
 </dict>
 </plist>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI" 
+             xmlns:vm="clr-namespace:MyTeleprompter.ViewModels"
+             x:Class="MyTeleprompter.Views.TeleprompterPage"
+             BackgroundColor="Black"
+             Title="Teleprompter">
+
+    <Grid>
+
+        <!-- CAMERA PREVIEW -->
+        <cv:CameraView x:Name="cameraView"
+                       CamerasLoaded="OnCamerasLoaded"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Fill"/>
+
+        <!-- TELEPROMPTER TEXT -->
+        <ScrollView x:Name="prompterScrollView"
+                    Margin="20,0,20,0"
+                    VerticalScrollBarVisibility="Never">
+
+            <Label Text="{Binding Note.Content}"
+                   FontSize="{Binding FontSize}"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center">
+                <Label.Shadow>
+                    <Shadow Brush="Black"
+                            Offset="2,2"
+                            Radius="6"
+                            Opacity="0.9"/>
+                </Label.Shadow>
+            </Label>
+        </ScrollView>
+
+        <!-- CONTROLS PANEL -->
+        <VerticalStackLayout VerticalOptions="End"
+                             Margin="16"
+                             Spacing="12">
+
+            <!-- SPEED + FONT CONTROLS -->
+            <Frame BackgroundColor="#80000000"
+                   CornerRadius="16"
+                   Padding="12"
+                   HasShadow="False">
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="14">
+
+                    <!-- SPEED -->
+                    <VerticalStackLayout Grid.Column="0" Spacing="6">
+
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                            <Label Text="Speed" TextColor="White" FontSize="14"/>
+                            <Label Text="{Binding ScrollSpeed, StringFormat='{0:F0}'}" 
+                                   TextColor="#00FF00" 
+                                   FontSize="12" 
+                                   FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center">
+                            <Button Text="-"
+                                    WidthRequest="12"
+                                    HeightRequest="12"
+                                    CornerRadius="6"
+                                    Padding="0"
+                                    FontSize="24"
+                                    FontAttributes="Bold"
+                                    Command="{Binding DecreaseSpeedCommand}" />
+
+                            <Slider Grid.Column="1"
+                                    Value="{Binding ScrollSpeed, Mode=TwoWay}"
+                                    Minimum="10"
+                                    Maximum="100"
+                                    MinimumTrackColor="White"/>
+
+                            <Button Grid.Column="2"
+                                    Text="+"
+                                    WidthRequest="12"
+                                    HeightRequest="12"
+                                    CornerRadius="6"
+                                    Padding="0"
+                                    FontSize="24"
+                                    FontAttributes="Bold"
+                                    Command="{Binding IncreaseSpeedCommand}" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- FONT SIZE -->
+                    <VerticalStackLayout Grid.Column="1" Spacing="6">
+                        
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                            <Label Text="Font Size" TextColor="White" FontSize="14"/>
+                            <Label Text="{Binding FontSize, StringFormat='{0:F0}'}" 
+                                   TextColor="#00FF00" 
+                                   FontSize="12" 
+                                   FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+
+                        <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center">
+                            <Button Text="-"
+                                    WidthRequest="12"
+                                    HeightRequest="12"
+                                    CornerRadius="6"
+                                    Padding="0"
+                                    FontSize="24"
+                                    FontAttributes="Bold"
+                                    Command="{Binding DecreaseFontCommand}" />
+
+                            <Slider Grid.Column="1"
+                                    Value="{Binding FontSize, Mode=TwoWay}"
+                                    Minimum="18"
+                                    Maximum="60"
+                                    MinimumTrackColor="White"/>
+
+                            <Button Grid.Column="2"
+                                    Text="+"
+                                    WidthRequest="12"
+                                    HeightRequest="12"
+                                    CornerRadius="6"
+                                    Padding="0"
+                                    FontSize="24"
+                                    FontAttributes="Bold"
+                                    Command="{Binding IncreaseFontCommand}" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                </Grid>
+            </Frame>
+
+            <!-- RECORD BUTTON -->
+            <Button Text="{Binding IsRecording,
+                                   Converter={toolkit:BoolToObjectConverter
+                                   TrueObject='STOP RECORDING',
+                                   FalseObject='START RECORDING'}}"
+                    BackgroundColor="{Binding IsRecording,
+                                   Converter={toolkit:BoolToObjectConverter
+                                   TrueObject='Red',
+                                   FalseObject='Green'}}"
+                    TextColor="White"
+                    HeightRequest="60"
+                    CornerRadius="14"
+                    FontAttributes="Bold"
+                    Command="{Binding ToggleRecordingCommand}"
+                    CommandParameter="{x:Reference cameraView}"
+                    Clicked="OnRecordClicked"/>
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

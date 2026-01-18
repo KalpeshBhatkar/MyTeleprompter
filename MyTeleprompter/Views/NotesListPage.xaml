@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:MyTeleprompter.ViewModels"
+             xmlns:models="clr-namespace:MyTeleprompter.Models"
+             x:Class="MyTeleprompter.Views.NotesListPage"
+             Title="Notes">
+    <Grid>
+        <CollectionView ItemsSource="{Binding Notes}"
+                        SelectionMode="None"
+                        Margin="10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Note">
+                    <Frame Margin="0,5" Padding="15" BackgroundColor="#222" CornerRadius="10">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:NotesListViewModel}}, Path=EditNoteCommand}"
+                                                  CommandParameter="{Binding .}"/>
+                        </Frame.GestureRecognizers>
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold" TextColor="White"/>
+                            <Label Text="{Binding CreatedAt, StringFormat='{0:MMM dd, yyyy}'}" TextColor="#aaa" FontSize="12"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Text="+"
+                FontSize="30"
+                CornerRadius="30"
+                WidthRequest="60"
+                HeightRequest="60"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="20"
+                Command="{Binding AddNoteCommand}"
+                BackgroundColor="{StaticResource Primary}"/>
+    </Grid>
+
+</ContentPage>
